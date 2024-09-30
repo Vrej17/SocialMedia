@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #555b;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+@font-face {
+  font-family: "PlaywriteCU-Regular";
+  src: local("PlaywriteCU-Regular"),
+    url("../public/assets/fonts/PlaywriteCU-Regular.ttf") format("truetype");
+}
