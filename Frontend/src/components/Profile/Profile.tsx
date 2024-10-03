@@ -8,12 +8,15 @@ import ProfileInfo from "./ProfileInfo";
 import ProfileMenu from "./ProfileMenu";
 import { ChangeProfile } from "./ChangeProfile";
 
+
 export default function Profile() {
   const profile = useSelector((state: RootState) => state.myprofile.myprofile);
   const theme = useSelector((state: RootState) => state.theme);
   const [userPosts, setUserPosts] = useState<postType[]>([]);
   const [imgUrl, setImgUrl] = useState("");
   const [isChangeProfile, setIsChangeProfile] = useState(false);
+  
+
 
   return (
     <>

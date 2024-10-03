@@ -66,7 +66,7 @@ export const AuthFormTypes = forwardRef<HTMLInputElement, formTypes>(
           />
         </label>
         <div className="h-5 bg-transparent text-white">
-          {error.length !== 0 && error}
+          {error?.length !== 0 && error}
         </div>
 
         <button

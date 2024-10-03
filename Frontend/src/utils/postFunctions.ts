@@ -1,5 +1,7 @@
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { postType } from "../dataTypes";
+import { store } from "..";
+import { setLoadingFalseAsync, setLoadingTrueAsync } from "./LoadFunctions";
 export function changeImgUrl({
   e,
   setImgUrl,
@@ -10,7 +12,7 @@ export function changeImgUrl({
   const fileInput = e.target.files && e.target.files[0];
   if (fileInput) {
     const reader = new FileReader();
-    reader.onload = ({ target }) => {
+    reader.onloadend = ({ target }) => {
       if (target) {
         const image = target.result as string;
         setImgUrl(image.split(",")[1]);
@@ -18,7 +20,7 @@ export function changeImgUrl({
     };
     reader.readAsDataURL(fileInput);
   } else {
-    setImgUrl(prev => prev);
+    setImgUrl((prev) => prev);
   }
 }
 export type CreatePostType = {
@@ -35,6 +37,7 @@ export async function createPost({
   userId,
   postForm,
 }: CreatePostType) {
+  store.dispatch(setLoadingTrueAsync);
   try {
     const response = await fetch("/post/create", {
       method: "POST",
@@ -48,10 +51,12 @@ export async function createPost({
     }
 
     const data = await response.json();
- 
+
     setUserPosts((prev) => [...prev, data]);
     setImgUrl("");
   } catch (error) {
     console.log(error);
+  } finally {
+    store.dispatch(setLoadingFalseAsync);
   }
 }

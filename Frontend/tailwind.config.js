@@ -41,7 +41,7 @@ module.exports = {
           "linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.00) 100%)",
         "gradient-to-black": "linear-gradient(180deg, transparent, #000)",
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        'gradient-header':"linear-gradient(to right, #c33764, #1d2671);",
+        "gradient-header": "linear-gradient(to right, #c33764, #1d2671);",
         "gradient-to-blue": "linear-gradient(135deg, transparent, #9599E2);",
         "gradient-custom":
           "linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)",
@@ -156,9 +156,9 @@ module.exports = {
         ticker: "ticker 25s linear infinite",
         "slide-down": "slide-down 0.2s ease",
         "like-animate":
-          "like-animate 0.8s cubic-bezier(0.5, 0, 0.5, 1) forwards",
+          "like-animate 0.7s cubic-bezier(0.5, 0, 0.5, 1) forwards",
         "dislike-animate":
-          "dislike-animate 0.8s cubic-bezier(0.5, 0, 0.5, 1) forwards",
+          "dislike-animate 0.7s cubic-bezier(0.5, 0, 0.5, 1) forwards",
         blink: "blink 0.7s ease-out",
         "border-loader": "border-loader 3s ease infinite",
       },

@@ -42,6 +42,8 @@ export default function UserProfile() {
     }
   }, [userId, userPosts.length, user, usersWhoLike]);
 
+
+
   return (
     <div
       className={clsx(

@@ -1,6 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { setLoadingFalseAsync, setLoadingTrueAsync } from "../HelperFunctions";
+import {
+  setLoadingFalseAsync,
+  setLoadingTrueAsync,
+} from "../utils/LoadFunctions";
 import { store } from "..";
 import { isLogged } from "../constants/constnats";
 
@@ -61,6 +64,7 @@ export const getProfileByToken = createAsyncThunk(
   "get/Profile",
   async (_, { rejectWithValue }) => {
     try {
+      store.dispatch(setLoadingTrueAsync);
       if (isLogged) {
         const response = await fetch("/user/profile", {
           method: "GET",
@@ -77,6 +81,8 @@ export const getProfileByToken = createAsyncThunk(
       }
     } catch (error) {
       return rejectWithValue("Internal Server Error");
+    } finally {
+      store.dispatch(setLoadingFalseAsync);
     }
   }
 );
@@ -86,6 +92,7 @@ export const updateUser = createAsyncThunk(
     form: { username: string; bio: string; icon: string; userId: string },
     { rejectWithValue }
   ) => {
+    store.dispatch(setLoadingTrueAsync);
     try {
       const { userId, ...profileChanges } = form;
       const response = await fetch(`/user/update/${userId}`, {
@@ -96,6 +103,7 @@ export const updateUser = createAsyncThunk(
         body: JSON.stringify({ ...profileChanges }),
       });
       const data = await response.json();
+
       if (!response.ok) {
         return rejectWithValue(data.error || "Failed to update user");
       }
@@ -103,6 +111,8 @@ export const updateUser = createAsyncThunk(
       return { ...profileChanges };
     } catch (error) {
       return rejectWithValue("Internal Server Error");
+    } finally {
+      store.dispatch(setLoadingFalseAsync);
     }
   }
 );

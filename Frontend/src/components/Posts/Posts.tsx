@@ -8,7 +8,6 @@ import { removePostError } from "../../Slices/Slices";
 import Post from "./Post";
 import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
-
 export const Posts: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const posts = useSelector((state: RootState) => state.posts.posts);
@@ -18,6 +17,7 @@ export const Posts: FC = () => {
   );
   const navigate = useNavigate();
 
+  
   useEffect(() => {
     if (postError?.length) {
       const timer = setTimeout(() => {
@@ -26,7 +26,7 @@ export const Posts: FC = () => {
       return () => clearTimeout(timer);
     }
   }, [postError, dispatch]);
-
+  
   useEffect(() => {
     if (!posts?.length && profileId) {
       dispatch(getPostsByThunk({ userId: profileId }));
@@ -34,7 +34,9 @@ export const Posts: FC = () => {
       return;
     }
   }, [posts, dispatch, profileId]);
-
+  
+  
+  
   return (
     <main className="flex flex-col items-center break-words">
       {posts?.length !== 0 &&

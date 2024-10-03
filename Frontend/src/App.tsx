@@ -1,25 +1,28 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Spin } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Loading3QuartersOutlined } from "@ant-design/icons";
 import Layout from "antd/es/layout/layout";
 import { Content } from "antd/es/layout/layout";
-import { useEffect} from "react";
+import { useEffect } from "react";
 import { Header } from "./components/Header";
 import { RootState } from "./dataTypes";
 import clsx from "clsx";
+
+
 function App() {
   const isLoading = useSelector((state: RootState) => state.loading);
   const theme = useSelector((state: RootState) => state.theme);
   const profile = useSelector((state: RootState) => state.myprofile.myprofile);
   const navigate = useNavigate();
+  
+  
   useEffect(() => {
     if (!profile.id?.length) {
       return navigate("/auth");
     }
   }, [profile, navigate]);
 
- 
   return (
     <div
       className={clsx(

@@ -5,12 +5,8 @@ import {
   logInProfile,
   updateUser,
 } from "../asyncThunks/profileThunks";
-import {
-  getPostsByThunk,
-  getUsersWhoLike,
-} from "../asyncThunks/postThunks";
-import {postsTypes } from "../dataTypes";
-
+import { getPostsByThunk, getUsersWhoLike } from "../asyncThunks/postThunks";
+import { postsTypes } from "../dataTypes";
 
 const loading = createSlice({
   name: "loading",
@@ -62,21 +58,24 @@ const myprofile = createSlice({
       .addCase(logInProfile.rejected, (state, action) => {
         state.error = action.payload as string;
       })
+
       .addCase(getProfileByToken.rejected, (state, action) => {
         state.error = action.payload as string;
+
         localStorage.clear();
       })
       .addCase(getProfileByToken.fulfilled, (state, action) => {
         const { payload } = action;
         state.myprofile = payload;
       })
+
       .addCase(updateUser.fulfilled, (state, action) => {
         state.myprofile.bio = action.payload.bio;
         state.myprofile.username = action.payload.username;
         state.myprofile.icon = action.payload.icon;
       })
       .addCase(updateUser.rejected, (state, action) => {
-        state.error = action.payload as string; 
+        state.error = action.payload as string;
       });
   },
 });

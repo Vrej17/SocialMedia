@@ -4,7 +4,7 @@ import { RootState } from "../dataTypes";
 import Logo from "./Logo";
 import { Link, useNavigate } from "react-router-dom";
 import clsx from "clsx";
-import { base64 } from "../constants/constnats";
+import { base64, imageAvatar } from "../constants/constnats";
 export const Header: FC = () => {
   const theme = useSelector((state: RootState) => state.theme);
   const navigate = useNavigate();
@@ -13,9 +13,7 @@ export const Header: FC = () => {
     <header
       className={clsx(
         "flex gap-x-8 fixed w-full items-center mobile-sm:gap-x-2 min-h-max text-white m-0 px-10 mobile:px-5 z-20",
-        theme
-          ? " bg-violet-800 bg-gradient-header"
-          : "bg-cyan-950"
+        theme ? " bg-violet-800 bg-gradient-header" : "bg-cyan-950"
       )}
     >
       <Logo
@@ -41,15 +39,17 @@ export const Header: FC = () => {
       </span>
 
       <div className="flex ml-auto gap-x-8 mobile-md:gap-x-2 items-center">
-        {profile.icon && (
+        
           <Link to="/account">
             <img
-              src={`${base64}${profile.icon}`}
+              src={`${base64}${
+                profile.icon?.length ? profile.icon : imageAvatar
+              }`}
               className="rounded-full hover:scale-110 transition-all w-14 h-14 duration-300 object-cover"
               alt="Profile Icon"
             ></img>
           </Link>
-        )}
+       
       </div>
     </header>
   );

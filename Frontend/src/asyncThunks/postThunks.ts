@@ -1,8 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { postedUserType } from "../dataTypes";
-import { setLoadingFalseAsync, setLoadingTrueAsync } from "../HelperFunctions";
+import {
+  setLoadingFalseAsync,
+  setLoadingTrueAsync,
+} from "../utils/LoadFunctions";
 import { store } from "..";
-
 
 export const getPostsByThunk = createAsyncThunk(
   "posts/getting",
@@ -20,7 +22,7 @@ export const getPostsByThunk = createAsyncThunk(
       if (!response.ok) {
         return rejectWithValue("Something Went Wrong Please Try Again");
       }
-      if(data.length === 0) {
+      if (data.length === 0) {
         return rejectWithValue("No posts");
       }
       return data;
@@ -51,27 +53,3 @@ export const getUsersWhoLike = createAsyncThunk(
     }
   }
 );
-// export const getUsersByPosts = createAsyncThunk<
-//   userType,
-//   string,
-//   { rejectValue: string }
-// >("users/posts/getting", async (profileId: string, { rejectWithValue }) => {
-//   // Dispatch actions to update loading state
-//   store.dispatch(setLoadingTrueAsync);
-
-//   try {
-//     const response = await fetch(`/user/${profileId}`);
-
-//     const userData = await response.json();
-//     console.log(userData);
-//     if (!response.ok) {
-//       return rejectWithValue(userData.error as string);
-//     }
-
-//     return userData;
-//   } catch (error) {
-//     return rejectWithValue(`Network error: klir`);
-//   } finally {
-//     store.dispatch(setLoadingFalseAsync);
-//   }
-// });

@@ -42,4 +42,4 @@ export type postsTypes = {
   usersWhoLike: postedUserType[];
 };
 export type RootState = ReturnType<typeof store.getState>;
-export type middlewares = { type: string; payload: any; meta?: any };
+
