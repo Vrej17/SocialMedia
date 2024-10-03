@@ -1,4 +1,5 @@
-First step npm install in Command Line then cd to Backend npm start and cd Frontend npm start 
+First step npm install in Command Line then cd to Backend npm start 
+and cd Frontend npm start 
 In Backend Used         
 #Typescript                   
 #Express with Routing         
