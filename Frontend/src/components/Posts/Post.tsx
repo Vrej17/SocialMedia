@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../dataTypes";
 import clsx from "clsx";
-import PostsDescription from "./PostsDescription";
-import PostsLikes from "./PostsLikes/PostsLikes";
-import PostLikedUsers from "./PostsLikes/PostLikedUsers";
+import { Descriptions } from "./Description";
+import { LikesCount } from "./Likes/LikesCount";
+import { LikedPostUsers } from "./Likes/LikedPostUsers";
 import { base64 } from "../../constants/constnats";
 
 interface PostInterface {
@@ -14,7 +14,7 @@ interface PostInterface {
   title: string;
   index: number;
 }
-export default function Post({
+export function Post({
   postId,
   image,
   description,
@@ -45,19 +45,19 @@ export default function Post({
         className="rounded-t-2xl max-h-[400px] object-cover"
       />
       <div className="flex flex-col gap-x-3 p-3">
-        <PostsDescription
+        <Descriptions
           userInfo={userInfo}
           title={title}
           description={description}
         />
 
-        <PostsLikes
+        <LikesCount
           userId={profileId}
           postId={postId}
           setOpenLikes={setOpenLikes}
           index={index}
         />
-        <PostLikedUsers openLikes={openLikes} setOpenLikes={setOpenLikes} />
+        <LikedPostUsers openLikes={openLikes} setOpenLikes={setOpenLikes} />
       </div>
     </section>
   );

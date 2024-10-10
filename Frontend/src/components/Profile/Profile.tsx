@@ -1,22 +1,30 @@
 import { useSelector } from "react-redux";
-import { postType, RootState } from "../../dataTypes";
-import { useState } from "react";
+import { PostType, RootState } from "../../dataTypes";
+import { useEffect, useState } from "react";
 import clsx from "clsx";
 import { ProfilePosts } from "./ProfilePosts";
-import ProfilePostCreate from "./ProfilePostCreate";
-import ProfileInfo from "./ProfileInfo";
-import ProfileMenu from "./ProfileMenu";
+import {PostCreate} from "./PostCreate";
+import { InfoProfile } from "./InfoProfile";
+import { MenuProfile } from "./MenuProfile";
 import { ChangeProfile } from "./ChangeProfile";
+import { getProfilePosts } from "../../utils/userFunctions";
 
-
-export default function Profile() {
+export function Profile() {
   const profile = useSelector((state: RootState) => state.myprofile.myprofile);
   const theme = useSelector((state: RootState) => state.theme);
-  const [userPosts, setUserPosts] = useState<postType[]>([]);
+  const [userPosts, setUserPosts] = useState<PostType[]>([]);
   const [imgUrl, setImgUrl] = useState("");
   const [isChangeProfile, setIsChangeProfile] = useState(false);
-  
 
+  useEffect(() => {
+    if (profile.id) {
+      const fetchPosts = async () => {
+        setUserPosts(await getProfilePosts(profile.id));
+      };
+
+      fetchPosts();
+    }
+  }, [profile.id]);
 
   return (
     <>
@@ -27,12 +35,12 @@ export default function Profile() {
           imgUrl || isChangeProfile ? "hidden" : ""
         )}
       >
-        <ProfileMenu
+        <MenuProfile
           setImgUrl={setImgUrl}
           setIsChangeProfile={setIsChangeProfile}
         />
 
-        <ProfileInfo />
+        <InfoProfile />
         <div
           className={clsx(
             "border-slate-600 h-0 mt-2 border-opacity-30 rounded-full border-2 w-full"
@@ -41,12 +49,11 @@ export default function Profile() {
         <ProfilePosts
           userInfo={profile}
           userId={profile.id}
-          setUserPosts={setUserPosts}
           userPosts={userPosts}
         ></ProfilePosts>
       </div>
       {imgUrl.length !== 0 && (
-        <ProfilePostCreate
+        <PostCreate
           setImgUrl={setImgUrl}
           setUserPosts={setUserPosts}
           imgUrl={imgUrl}

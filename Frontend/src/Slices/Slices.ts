@@ -6,7 +6,7 @@ import {
   updateUser,
 } from "../asyncThunks/profileThunks";
 import { getPostsByThunk, getUsersWhoLike } from "../asyncThunks/postThunks";
-import { postsTypes } from "../dataTypes";
+import { PostsTypes } from "../dataTypes";
 
 const loading = createSlice({
   name: "loading",
@@ -25,7 +25,7 @@ const initialProfile = {
     updatedAt: "",
     createdAt: "",
   },
-  error: "",
+  profileErrMessage: "",
 };
 
 const myprofile = createSlice({
@@ -33,8 +33,8 @@ const myprofile = createSlice({
   initialState: initialProfile,
 
   reducers: {
-    removeError(state) {
-      state.error = "";
+    removeProfileErrMessage(state) {
+      state.profileErrMessage = "";
     },
     logOut(state) {
       state.myprofile = initialProfile.myprofile;
@@ -49,18 +49,18 @@ const myprofile = createSlice({
         state.myprofile = { ...payload.other, token: payload.token };
       })
       .addCase(createMyProfile.rejected, (state, action) => {
-        state.error = action.payload as string;
+        state.profileErrMessage = action.payload as string;
       })
       .addCase(logInProfile.fulfilled, (state, action) => {
         const { payload } = action;
         state.myprofile = { ...payload.other, token: payload.token };
       })
       .addCase(logInProfile.rejected, (state, action) => {
-        state.error = action.payload as string;
+        state.profileErrMessage = action.payload as string;
       })
 
       .addCase(getProfileByToken.rejected, (state, action) => {
-        state.error = action.payload as string;
+        state.profileErrMessage = action.payload as string;
 
         localStorage.clear();
       })
@@ -75,7 +75,7 @@ const myprofile = createSlice({
         state.myprofile.icon = action.payload.icon;
       })
       .addCase(updateUser.rejected, (state, action) => {
-        state.error = action.payload as string;
+        state.profileErrMessage = action.payload as string;
       });
   },
 });
@@ -83,14 +83,14 @@ const posts = createSlice({
   name: "posts",
   initialState: {
     posts: [],
-    error: "",
+    postsErrMessage: "",
     likes: [],
     users: [],
     usersWhoLike: [],
-  } as postsTypes,
+  } as PostsTypes,
   reducers: {
     removePostError(state) {
-      state.error = "";
+      state.postsErrMessage = "";
     },
     addDisLikeAction(state, action) {
       const { index } = action.payload;
@@ -111,10 +111,10 @@ const posts = createSlice({
         state.users = action.payload.users;
       })
       .addCase(getPostsByThunk.rejected, (state, action) => {
-        state.error = action.payload as string;
+        state.postsErrMessage = action.payload as string;
       })
       .addCase(getUsersWhoLike.rejected, (state, action) => {
-        state.error = action.payload as string;
+        state.postsErrMessage = action.payload as string;
       })
       .addCase(getUsersWhoLike.fulfilled, (state, action) => {
         state.usersWhoLike = action.payload;
@@ -140,6 +140,9 @@ export const Reducers = {
 
 export const { setLoading } = loading.actions;
 export const { changeTheme } = theme.actions;
-export const { addLikeAction, addDisLikeAction, removePostError } =
-  posts.actions;
-export const { removeError, logOut } = myprofile.actions;
+export const {
+  addLikeAction,
+  addDisLikeAction,
+  removePostError,
+} = posts.actions;
+export const { removeProfileErrMessage, logOut } = myprofile.actions;

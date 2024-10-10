@@ -1,5 +1,7 @@
 import { HeartSVG } from "../../SVG/HeartSVG";
-type PostsLikesCountTypes = {
+
+
+type LikeCountType = {
   addLike: () => void;
   addDislike: () => void;
   getUsersWhoLike: () => void;
@@ -7,13 +9,16 @@ type PostsLikesCountTypes = {
     countsOfLike: number;
     isLikedByUser: boolean;
   };
+
 };
-export function PostsLikesCountAndHeart({
+export function LikeCount({
   likes,
   addLike,
   addDislike,
   getUsersWhoLike,
-}: PostsLikesCountTypes) {
+}: LikeCountType) {
+
+
   return (
     <>
       <button className="text-start" onClick={() => getUsersWhoLike()}>

@@ -1,19 +1,19 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { base64 } from "../../constants/constnats";
 import {
   addInProfileDisLike,
   addInProfileLike,
 } from "../../utils/likeFunctions";
-import { PostsLikesCountAndHeart } from "../Posts/PostsLikes/PostsLikesCount";
+import { LikeCount } from "../Posts/Likes/LikeCount";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, postType, RootState, userType } from "../../dataTypes";
+import { AppDispatch, PostType, RootState, UserType } from "../../dataTypes";
 import { getUsersWhoLike } from "../../asyncThunks/postThunks";
-import PostsDescriptions from "../Posts/PostsDescription";
+import { Descriptions } from "../Posts/Description";
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import PostLikedUsers from "../Posts/PostsLikes/PostLikedUsers";
-import clsx from "clsx";
+import { LikedPostUsers } from "../Posts/Likes/LikedPostUsers";
 
-export default function ProfilePostOpened({
+import clsx from "clsx";
+export function PostOpenedProfile({
   postInfo,
   index,
   setLikesCountAndIsLikedByUser,
@@ -21,8 +21,8 @@ export default function ProfilePostOpened({
   likes,
   userInfo,
 }: {
-  userInfo: userType;
-  postInfo: postType;
+  userInfo: UserType;
+  postInfo: PostType;
   likes: { countsOfLike: number; isLikedByUser: boolean };
   setLikesCountAndIsLikedByUser: Dispatch<
     SetStateAction<{ countsOfLike: number; isLikedByUser: boolean }[]>
@@ -30,10 +30,13 @@ export default function ProfilePostOpened({
   index: number;
   setOpenedPostIndex: Dispatch<SetStateAction<null | number>>;
 }) {
+
+  
   const profile = useSelector((state: RootState) => state.myprofile.myprofile);
   const theme = useSelector((state: RootState) => state.theme);
   const [openLikes, setOpenLikes] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+
   return (
     <div
       id="profilePostOpened"
@@ -66,14 +69,14 @@ export default function ProfilePostOpened({
         />
         <div className="flex flex-col gap-x-3 p-3">
           <div className="flex">
-            <PostsDescriptions
+            <Descriptions
               title={postInfo.title}
               description={postInfo.description}
               userInfo={userInfo}
             />
           </div>
           <div className="flex gap-8 p-1 justify-center items-center">
-            <PostsLikesCountAndHeart
+            <LikeCount
               addLike={() => {
                 addInProfileLike({
                   index,
@@ -97,7 +100,7 @@ export default function ProfilePostOpened({
               }}
             />
           </div>
-          <PostLikedUsers openLikes={openLikes} setOpenLikes={setOpenLikes} />
+          <LikedPostUsers openLikes={openLikes} setOpenLikes={setOpenLikes} />
         </div>
       </div>
     </div>

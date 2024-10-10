@@ -3,13 +3,12 @@ import { base64, imageAvatar } from "../../constants/constnats";
 import { AppDispatch, RootState } from "../../dataTypes";
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-  ArrowLeftOutlined,
-  EditOutlined,
-} from "@ant-design/icons";
+import { ArrowLeftOutlined, EditOutlined } from "@ant-design/icons";
 import { Dispatch, SetStateAction, useState } from "react";
 import { changeImgUrl } from "../../utils/postFunctions";
 import { updateUser } from "../../asyncThunks/profileThunks";
+import { removeProfileErrMessage } from "../../Slices/Slices";
+import ErrMessage from "./ErrMessage";
 
 export function ChangeProfile({
   setIsChangeProfile,
@@ -18,7 +17,9 @@ export function ChangeProfile({
 }) {
   const profile = useSelector((state: RootState) => state.myprofile.myprofile);
   const theme = useSelector((state: RootState) => state.theme);
-  const [icon, setIcon] = useState(profile.icon?.length > 0 ? profile.icon : imageAvatar);
+  const [icon, setIcon] = useState(
+    profile.icon?.length > 0 ? profile.icon : imageAvatar
+  );
   const [profileChangeForm, setProfileChangeForm] = useState<{
     username: string;
     bio: string;
@@ -26,8 +27,14 @@ export function ChangeProfile({
     username: profile.username,
     bio: profile.bio,
   });
+
   const [changeProfileSuccess, setChangeProfileSuccess] = useState(false);
+
   const dispatch = useDispatch<AppDispatch>();
+
+  const profileErrMessage = useSelector(
+    (state: RootState) => state.myprofile.profileErrMessage
+  );
 
   return (
     <>
@@ -120,41 +127,50 @@ export function ChangeProfile({
           </div>
         </div>
       </div>
-
-      <div
-        className={clsx(
-          "absolute flex flex-col text-black h-32 rounded-xl py-2 px-6 transition-all duration-700 bg-slate-100 shadow-2xl",
-          changeProfileSuccess ? "bottom-[40%]" : "bottom-[2000px]"
-        )}
-      >
-        <h1 className="font-bold text-xl">
-          Are You Sure That You Want to Change Profile?
-        </h1>
-        <div className="flex justify-end gap-4 mt-auto">
-          <button
-            className="border border-black rounded-lg px-2 py-2 bg-transparent hover:bg-sky-800 hover:text-white  duration-300 transition-all"
-            onClick={() => {
-              dispatch(
-                updateUser({
-                  ...profileChangeForm,
-                  userId: profile.id,
-                  icon,
-                })
-              ).then(() => {
-                setIsChangeProfile(false);
-              });
-            }}
-          >
-            Change Profile
-          </button>
-          <button
-            onClick={() => setChangeProfileSuccess(false)}
-            className="bg-red-700 text-white px-4 py-2 rounded-md hover:bg-red-800 duration-300 transition-all"
-          >
-            Cancel
-          </button>
+      {profileErrMessage ? (
+        <ErrMessage
+          errMessage={profileErrMessage}
+          deleteMessage={() => dispatch(removeProfileErrMessage())}
+        />
+      ) : (
+        <div
+          className={clsx(
+            "absolute flex flex-col text-black h-32 rounded-xl py-2 px-6 transition-all duration-700 bg-slate-100 shadow-2xl",
+            changeProfileSuccess ? "bottom-[40%]" : "bottom-[2000px]"
+          )}
+        >
+          <h1 className="font-bold text-xl">
+            Are You Sure That You Want to Change Profile?
+          </h1>
+          <div className="flex justify-end gap-4 mt-auto">
+            <button
+              className="border border-black rounded-lg px-2 py-2 bg-transparent hover:bg-sky-800 hover:text-white  duration-300 transition-all"
+              onClick={() => {
+                dispatch(
+                  updateUser({
+                    ...profileChangeForm,
+                    userId: profile.id,
+                    icon,
+                  })
+                ).then(() => {
+                  setIsChangeProfile(false);
+                });
+              }}
+            >
+              Change Profile
+            </button>
+            <button
+              onClick={() => {
+                dispatch(removeProfileErrMessage());
+                setChangeProfileSuccess(false);
+              }}
+              className="bg-red-700 text-white px-4 py-2 rounded-md hover:bg-red-800 duration-300 transition-all"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

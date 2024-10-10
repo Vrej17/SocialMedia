@@ -1,28 +1,28 @@
 import { Dispatch, SetStateAction } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../dataTypes";
-import { PostsLikesCountAndHeart } from "./PostsLikesCount";
+import { LikeCount } from "./LikeCount";
 import { addInPostDisLike, addInPostLike } from "../../../utils/likeFunctions";
 import { getUsersWhoLike } from "../../../asyncThunks/postThunks";
 
-type PostsLikesTypes = {
+type LikesCountTypes = {
   index: number;
   userId: string;
   postId: string;
   setOpenLikes: Dispatch<SetStateAction<boolean>>;
 };
-export default function PostsLikes({
+export function LikesCount({
   index,
   userId,
   postId,
   setOpenLikes,
-}: PostsLikesTypes) {
+}: LikesCountTypes) {
   const likes = useSelector((state: RootState) => state.posts.likes[index]);
   const dispatch = useDispatch<AppDispatch>();
 
   return (
     <div className="flex gap-8 p-1 justify-center items-center">
-      <PostsLikesCountAndHeart
+      <LikeCount
         getUsersWhoLike={() => {
           dispatch(getUsersWhoLike(postId));
           setOpenLikes((prev) => !prev);

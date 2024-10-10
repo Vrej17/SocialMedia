@@ -1,19 +1,21 @@
 import clsx from "clsx";
 import { useState } from "react";
-import { postedUserType, RootState } from "../../dataTypes";
+import { PostedUserType, RootState } from "../../dataTypes";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { base64, imageAvatar } from "../../constants/constnats";
-export type PostsDescriptionTypes = {
+
+
+ type DescriptionTypes = {
   title: string;
   description: string;
-  userInfo:postedUserType
+  userInfo:PostedUserType
 };
-export default function PostsDescriptions({
+export function Descriptions({
   title,
   description,
   userInfo
-}: PostsDescriptionTypes) {
+}: DescriptionTypes) {
   const [openDescription, setOpenDescription] = useState(false);
   const navigate = useNavigate();
   const profileId = useSelector(

@@ -3,9 +3,8 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   setLoadingFalseAsync,
   setLoadingTrueAsync,
-} from "../utils/LoadFunctions";
+} from "../utils/loadFunctions";
 import { store } from "..";
-import { isLogged } from "../constants/constnats";
 
 export const createMyProfile = createAsyncThunk(
   "myprofile/create",
@@ -21,14 +20,14 @@ export const createMyProfile = createAsyncThunk(
         body: JSON.stringify({ ...form }),
       });
       const data = await response.json();
-      console.log(data);
+
       if (!response.ok) {
-        return rejectWithValue(data.error || "Name already used");
+        return rejectWithValue(data.message);
       }
 
       return data;
     } catch (error) {
-      return rejectWithValue("Failed Login");
+      return rejectWithValue("internal Server Error");
     } finally {
       store.dispatch(setLoadingFalseAsync);
     }
@@ -45,16 +44,16 @@ export const logInProfile = createAsyncThunk(
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: isLogged, ...form }),
+        body: JSON.stringify({ id: localStorage.getItem("profile"), ...form }),
       });
       const data = await response.json();
       if (!response.ok) {
-        return rejectWithValue(data.error || "Failed to Login");
+        return rejectWithValue(data.message);
       }
 
       return data;
     } catch (error) {
-      return rejectWithValue("Failed Login");
+      return rejectWithValue("Internal Server Error");
     } finally {
       store.dispatch(setLoadingFalseAsync);
     }
@@ -65,20 +64,19 @@ export const getProfileByToken = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       store.dispatch(setLoadingTrueAsync);
-      if (isLogged) {
-        const response = await fetch("/user/profile", {
-          method: "GET",
-          headers: {
-            authorization: `Bearer ${isLogged}`,
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await response.json();
-        if (!response.ok) {
-          return rejectWithValue(data.error || "Please Login Or Register");
-        }
-        return data;
+
+      const response = await fetch("/user/profile", {
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("profile")}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        return rejectWithValue(data.message);
       }
+      return data;
     } catch (error) {
       return rejectWithValue("Internal Server Error");
     } finally {
@@ -105,7 +103,7 @@ export const updateUser = createAsyncThunk(
       const data = await response.json();
 
       if (!response.ok) {
-        return rejectWithValue(data.error || "Failed to update user");
+        return rejectWithValue(data.message);
       }
 
       return { ...profileChanges };

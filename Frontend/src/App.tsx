@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Spin } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Loading3QuartersOutlined } from "@ant-design/icons";
@@ -9,14 +9,12 @@ import { Header } from "./components/Header";
 import { RootState } from "./dataTypes";
 import clsx from "clsx";
 
-
 function App() {
   const isLoading = useSelector((state: RootState) => state.loading);
   const theme = useSelector((state: RootState) => state.theme);
   const profile = useSelector((state: RootState) => state.myprofile.myprofile);
   const navigate = useNavigate();
-  
-  
+
   useEffect(() => {
     if (!profile.id?.length) {
       return navigate("/auth");
@@ -26,7 +24,7 @@ function App() {
   return (
     <div
       className={clsx(
-        "bg-gradient-to-blue min-h-screen flex justify-center [&_div]:transition-all [&_div]:duration-700 overflow-x-hidden",
+        "bg-gradient-to-blue min-h-screen flex justify-center overflow-x-hidden",
         !theme && "bg-slate-800"
       )}
     >

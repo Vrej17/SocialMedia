@@ -86,7 +86,7 @@ class likeControl {
             }
             catch (error) {
                 console.error("Error fetching users who liked the post:", error);
-                res.status(500).send("Internal Server Error");
+                res.status(500).json({ error: "Internal Server Error" });
             }
         });
     }

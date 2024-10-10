@@ -1,9 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { postedUserType } from "../dataTypes";
+import { PostedUserType } from "../dataTypes";
 import {
   setLoadingFalseAsync,
   setLoadingTrueAsync,
-} from "../utils/LoadFunctions";
+} from "../utils/loadFunctions";
 import { store } from "..";
 
 export const getPostsByThunk = createAsyncThunk(
@@ -20,10 +20,7 @@ export const getPostsByThunk = createAsyncThunk(
       const data = await response.json();
 
       if (!response.ok) {
-        return rejectWithValue("Something Went Wrong Please Try Again");
-      }
-      if (data.length === 0) {
-        return rejectWithValue("No posts");
+        return rejectWithValue(data.message);
       }
       return data;
     } catch (error) {
@@ -43,7 +40,7 @@ export const getUsersWhoLike = createAsyncThunk(
           "Content-Type": "application/json",
         },
       });
-      const data: postedUserType[] = await response.json();
+      const data: PostedUserType[] = await response.json();
       if (!response.ok) {
         return rejectWithValue("Please Try Again Later");
       }

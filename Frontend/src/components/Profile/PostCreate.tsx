@@ -2,20 +2,20 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { ArrowLeftOutlined, ExportOutlined } from "@ant-design/icons";
 import clsx from "clsx";
 import { useSelector } from "react-redux";
-import { postType, RootState } from "../../dataTypes";
+import { PostType, RootState } from "../../dataTypes";
 import { createPost } from "../../utils/postFunctions";
 import { base64 } from "../../constants/constnats";
 
 
 
-export default function ProfilePostCreate({
+export function PostCreate({
   imgUrl,
   setImgUrl,
   setUserPosts,
 }: {
   imgUrl: string;
   setImgUrl: Dispatch<SetStateAction<string>>;
-  setUserPosts: Dispatch<SetStateAction<postType[]>>;
+  setUserPosts: Dispatch<SetStateAction<PostType[]>>;
 }) {
   const theme = useSelector((state: RootState) => state.theme);
   const [postForm, setPostForm] = useState({

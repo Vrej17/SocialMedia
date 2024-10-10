@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import Post from "../database/models/post";
 import { v4 } from "uuid";
-import Like from "../database/models/likes";
+import { postService } from "../services/post-services";
+import { likeService } from "../services/likes-services";
 import User from "../database/models/user";
 
 class postsControl {
@@ -18,34 +19,15 @@ class postsControl {
       res.status(500).json({ error: "internal Server Error" });
     }
   }
-  async findPosts(req: Request, res: Response) {
+  async findAll(req: Request, res: Response) {
     try {
       const { userId } = req.params;
-      const recomendedPosts = await Post.findAll();
-
-      if (!recomendedPosts) {
-        return res
-          .status(404)
-          .json({ error: "Something Went Wrong Please Try Again Later" });
-      }
-      const likeOfPosts = await Promise.all(
-        recomendedPosts.map(async (post) => {
-          const likeCount = await Like.count({
-            where: { postId: post.id },
-          });
-          const isLiked = await Like.findOne({
-            where: { postId: post.id, userId: userId },
-          });
-
-          return {
-            countsOfLike: likeCount ? likeCount : 0,
-            isLikedByUser: isLiked ? true : false,
-          };
-        })
+      const recomendedPosts = await postService.findAllPosts();
+      const likeOfPosts = await likeService.findUserLikes(
+        recomendedPosts,
+        userId
       );
-      if (!likeOfPosts) {
-        return res.sendStatus(500);
-      }
+
       const postedUsers = await Promise.all(
         recomendedPosts.map(async (post) => {
           const user = await User.findOne({
@@ -56,19 +38,17 @@ class postsControl {
           return user && user;
         })
       );
-      if (!postedUsers) {
-        return res.sendStatus(500);
-      }
+
       res.status(200).json({
         posts: recomendedPosts,
         likes: likeOfPosts,
         users: postedUsers,
       });
-    } catch (error) {
-      res.status(500).json({ error: "Invalid Server Error" });
+    } catch (error: any) {
+      res.status(404).json({ message: error.message || "Failed To Get Posts" });
     }
   }
-  async findUserPosts(req: Request, res: Response) {
+  async findUserPostsLikes(req: Request, res: Response) {
     const { userId } = req.params;
 
     if (!userId) {
@@ -76,37 +56,31 @@ class postsControl {
     }
 
     try {
-      const posts = await Post.findAll({ where: { userId } });
+      const userPosts = await postService.findUserPosts(userId);
 
-      if (posts.length === 0) {
-        return res.sendStatus(400);
+      if (userPosts.length === 0) {
+        return res.status(400);
       }
-      const likeOfPosts = await Promise.all(
-        posts.map(async (post) => {
-          const likeCount = await Like.count({
-            where: { postId: post.id },
-          });
-          const isLiked = await Like.findOne({
-            where: { postId: post.id, userId: userId },
-          });
-
-          return {
-            countsOfLike: likeCount ? likeCount : 0,
-            isLikedByUser: isLiked ? true : false,
-          };
-        })
-      );
+      const likeOfPosts = await likeService.findUserLikes(userPosts, userId);
       if (!likeOfPosts) {
         return res.sendStatus(500);
       }
 
       res.status(200).json({
-        posts: posts,
         likes: likeOfPosts,
       });
     } catch (error) {
       res.sendStatus(500);
     }
   }
+  async findUserPosts(req: Request, res: Response) {
+    try {
+      const userPosts = await postService.findUserPosts(req.params.userId);
+      res.status(200).json(userPosts);
+    } catch (error: any) {
+      res.status(404).json({ message: error.message || "Server Error" });
+    }
+  }
 }
+
 export const postsController = new postsControl();

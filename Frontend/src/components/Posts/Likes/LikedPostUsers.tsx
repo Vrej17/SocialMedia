@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction} from "react";
+import { Dispatch, SetStateAction } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../dataTypes";
 
@@ -8,8 +8,7 @@ import clsx from "clsx";
 import { Link } from "react-router-dom";
 import { base64, imageAvatar } from "../../../constants/constnats";
 
-
-export default function PostLikedUsers({
+export function LikedPostUsers({
   openLikes,
   setOpenLikes,
 }: {
@@ -22,6 +21,7 @@ export default function PostLikedUsers({
   const profileId = useSelector(
     (state: RootState) => state.myprofile.myprofile.id
   );
+
 
   return (
     <div

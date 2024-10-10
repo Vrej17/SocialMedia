@@ -14,10 +14,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SECRET_KEY = void 0;
 const express_1 = __importDefault(require("express"));
-const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
+const user_routes_1 = __importDefault(require("./routes/user-routes"));
 const connection_1 = __importDefault(require("./database/connection"));
 const dotenv_1 = require("dotenv");
-const postRoutes_1 = __importDefault(require("./routes/postRoutes"));
+const post_routes_1 = __importDefault(require("./routes/post-routes"));
 const user_1 = __importDefault(require("./database/models/user"));
 const post_1 = __importDefault(require("./database/models/post"));
 const body_parser_1 = __importDefault(require("body-parser"));
@@ -31,8 +31,8 @@ app.use(body_parser_1.default.urlencoded({ limit: "10mb", extended: true }));
 app.use((0, cors_1.default)({ origin: "http://localhost:3000", credentials: true }));
 user_1.default.associate();
 post_1.default.associate();
-app.use("/user", userRoutes_1.default);
-app.use("/post", postRoutes_1.default);
+app.use("/user", user_routes_1.default);
+app.use("/post", post_routes_1.default);
 const testDatabaseConnection = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield connection_1.default.authenticate();

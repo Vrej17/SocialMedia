@@ -1,8 +1,8 @@
 import express from "express";
-import userRouter from "./routes/userRoutes";
+import userRouter from "./routes/user-routes";
 import sequelize from "./database/connection";
 import { config } from "dotenv";
-import postRoutes from "./routes/postRoutes";
+import postRoutes from "./routes/post-routes";
 import User from "./database/models/user";
 import Post from "./database/models/post";
 import bodyParser from "body-parser";
@@ -11,7 +11,7 @@ import cors from "cors";
 config();
 const app = express();
 const port = 4444;
-app.use(bodyParser.json({ limit: "10mb" })); 
+app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
@@ -33,7 +33,7 @@ const testDatabaseConnection = async () => {
 
 const syncDatabase = async () => {
   try {
-    await sequelize.sync();
+    await sequelize.sync()
     console.log("Database & tables created!");
   } catch (error) {
     console.error("Error syncing database:", error);

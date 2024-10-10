@@ -3,14 +3,15 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
 import "./tailwind.css";
 import { configureStore } from "@reduxjs/toolkit";
-import { Reducers, setLoading } from "./Slices/Slices";
+import { Reducers } from "./Slices/Slices";
 import { Provider } from "react-redux";
 import AuthForm from "./components/AuthForm/AuthForm";
 
 import { Posts } from "./components/Posts/Posts";
-import Profile from "./components/Profile/Profile";
-import UserProfile from "./components/UserProfile";
-export const url = "https://jsonplaceholder.typicode.com/";
+import {Profile} from "./components/Profile/Profile";
+import UserProfile from "./components/UserProfile"
+
+
 
 export const store = configureStore({
   reducer: { ...Reducers },

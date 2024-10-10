@@ -2,8 +2,10 @@ import sequelize from "../connection";
 import User from "./user";
 import Like from "./likes";
 import { DataTypes, Model } from "sequelize";
+
+
 class Post extends Model {
-  public id!: string;
+  public readonly id!: string;
   public title!: string;
   public description!: string;
   public image!: Text;

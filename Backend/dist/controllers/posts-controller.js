@@ -15,7 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.postsController = void 0;
 const post_1 = __importDefault(require("../database/models/post"));
 const uuid_1 = require("uuid");
-const likes_1 = __importDefault(require("../database/models/likes"));
+const post_services_1 = require("../services/post-services");
+const likes_services_1 = require("../services/likes-services");
 const user_1 = __importDefault(require("../database/models/user"));
 class postsControl {
     createPost(req, res) {
@@ -34,31 +35,12 @@ class postsControl {
             }
         });
     }
-    findPosts(req, res) {
+    findAll(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { userId } = req.params;
-                const recomendedPosts = yield post_1.default.findAll();
-                if (!recomendedPosts) {
-                    return res
-                        .status(404)
-                        .json({ error: "Something Went Wrong Please Try Again Later" });
-                }
-                const likeOfPosts = yield Promise.all(recomendedPosts.map((post) => __awaiter(this, void 0, void 0, function* () {
-                    const likeCount = yield likes_1.default.count({
-                        where: { postId: post.id },
-                    });
-                    const isLiked = yield likes_1.default.findOne({
-                        where: { postId: post.id, userId: userId },
-                    });
-                    return {
-                        countsOfLike: likeCount ? likeCount : 0,
-                        isLikedByUser: isLiked ? true : false,
-                    };
-                })));
-                if (!likeOfPosts) {
-                    return res.sendStatus(500);
-                }
+                const recomendedPosts = yield post_services_1.postService.findAllPosts();
+                const likeOfPosts = yield likes_services_1.likeService.findUserLikes(recomendedPosts, userId);
                 const postedUsers = yield Promise.all(recomendedPosts.map((post) => __awaiter(this, void 0, void 0, function* () {
                     const user = yield user_1.default.findOne({
                         where: { id: post.userId },
@@ -66,9 +48,6 @@ class postsControl {
                     });
                     return user && user;
                 })));
-                if (!postedUsers) {
-                    return res.sendStatus(500);
-                }
                 res.status(200).json({
                     posts: recomendedPosts,
                     likes: likeOfPosts,
@@ -76,43 +55,42 @@ class postsControl {
                 });
             }
             catch (error) {
-                res.status(500).json({ error: "Invalid Server Error" });
+                res.status(404).json({ message: error.message || "Failed To Get Posts" });
             }
         });
     }
-    findUserPosts(req, res) {
+    findUserPostsLikes(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { userId } = req.params;
             if (!userId) {
                 return res.sendStatus(300);
             }
             try {
-                const posts = yield post_1.default.findAll({ where: { userId } });
-                if (posts.length === 0) {
-                    return res.sendStatus(400);
+                const userPosts = yield post_services_1.postService.findUserPosts(userId);
+                if (userPosts.length === 0) {
+                    return res.status(400);
                 }
-                const likeOfPosts = yield Promise.all(posts.map((post) => __awaiter(this, void 0, void 0, function* () {
-                    const likeCount = yield likes_1.default.count({
-                        where: { postId: post.id },
-                    });
-                    const isLiked = yield likes_1.default.findOne({
-                        where: { postId: post.id, userId: userId },
-                    });
-                    return {
-                        countsOfLike: likeCount ? likeCount : 0,
-                        isLikedByUser: isLiked ? true : false,
-                    };
-                })));
+                const likeOfPosts = yield likes_services_1.likeService.findUserLikes(userPosts, userId);
                 if (!likeOfPosts) {
                     return res.sendStatus(500);
                 }
                 res.status(200).json({
-                    posts: posts,
                     likes: likeOfPosts,
                 });
             }
             catch (error) {
                 res.sendStatus(500);
+            }
+        });
+    }
+    findUserPosts(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userPosts = yield post_services_1.postService.findUserPosts(req.params.userId);
+                res.status(200).json(userPosts);
+            }
+            catch (error) {
+                res.status(404).json({ message: error.message || "Server Error" });
             }
         });
     }

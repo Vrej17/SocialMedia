@@ -8,7 +8,7 @@ import { UserOutlined } from "@ant-design/icons";
 import { Switch } from "antd";
 import { changeTheme, logOut } from "../../Slices/Slices";
 
-export default function ProfileMenu({
+export function MenuProfile({
   setImgUrl,
   setIsChangeProfile,
 }: {
@@ -32,7 +32,7 @@ export default function ProfileMenu({
       <menu
         className={clsx(
           "absolute w-1/2 z-10 flex flex-col items-end bg-inherit transition-[left] duration-700 pt-10 h-full",
-          showMenu ? "left-1/2" : "left-[1000px]",
+          showMenu ? "left-1/2" : "left-[1000px]"
         )}
       >
         {" "}
@@ -75,9 +75,7 @@ export default function ProfileMenu({
             </span>
           </button>
           <button
-            onClick={() => {
-              dispatch(logOut());
-            }}
+            onClick={() => dispatch(logOut())}
             className="hover:opacity-65"
           >
             Log Out

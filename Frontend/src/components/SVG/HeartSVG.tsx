@@ -7,6 +7,8 @@ export const HeartSVG: React.FC<HeartSVGAttributes> = ({
   onClick,
   userLike,
 }) => {
+
+  
   return (
     <button
       className={!userLike ? "animate-dislike-animate" : "animate-like-animate"}

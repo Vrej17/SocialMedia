@@ -1,7 +1,7 @@
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
-import { postType } from "../dataTypes";
+import { PostType } from "../dataTypes";
 import { store } from "..";
-import { setLoadingFalseAsync, setLoadingTrueAsync } from "./LoadFunctions";
+import { setLoadingFalseAsync, setLoadingTrueAsync } from "./loadFunctions";
 export function changeImgUrl({
   e,
   setImgUrl,
@@ -27,7 +27,7 @@ export type CreatePostType = {
   imgUrl: string;
   postForm: { title: string; description: string };
   setImgUrl: Dispatch<SetStateAction<string>>;
-  setUserPosts: Dispatch<SetStateAction<postType[]>>;
+  setUserPosts: Dispatch<SetStateAction<PostType[]>>;
   userId: string;
 };
 export async function createPost({

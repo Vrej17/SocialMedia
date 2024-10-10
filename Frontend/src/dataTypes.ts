@@ -2,7 +2,7 @@ import { store } from "./index";
 
 export type AppDispatch = typeof store.dispatch;
 
-export type postType = {
+export type PostType = {
   id: string;
   title: string;
   description: string;
@@ -12,7 +12,7 @@ export type postType = {
   updatedAt: Date;
 };
 
-export type likesType = {
+export type LikesType = {
   countsOfLike: number;
   isLikedByUser: boolean;
 }[];
@@ -23,7 +23,7 @@ export type Photos = {
   url: string;
   thumbnailUrl: string;
 }[];
-export type userType = {
+export type UserType = {
   id: string;
   username: string;
   bio: string;
@@ -33,13 +33,13 @@ export type userType = {
   createdAt: string;
 };
 
-export type postedUserType = Omit<userType, "token" | "password">;
-export type postsTypes = {
-  posts: postType[];
-  error: string;
-  likes: likesType;
-  users: postedUserType[];
-  usersWhoLike: postedUserType[];
+export type PostedUserType = Omit<UserType, "token" | "password">;
+export type PostsTypes = {
+  posts: PostType[];
+  postsErrMessage: string;
+  likes: LikesType;
+  users: PostedUserType[];
+  usersWhoLike: PostedUserType[];
 };
 export type RootState = ReturnType<typeof store.getState>;
 

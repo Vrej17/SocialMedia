@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 import { base64, imageAvatar } from "../../constants/constnats";
 
-export default function ProfileInfo() {
+export function InfoProfile() {
   const theme = useSelector((state: RootState) => state.theme);
   const navigate = useNavigate();
   const profile = useSelector((state: RootState) => state.myprofile.myprofile);

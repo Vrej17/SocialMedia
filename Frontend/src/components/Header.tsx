@@ -5,10 +5,12 @@ import Logo from "./Logo";
 import { Link, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { base64, imageAvatar } from "../constants/constnats";
+
 export const Header: FC = () => {
   const theme = useSelector((state: RootState) => state.theme);
   const navigate = useNavigate();
   const profile = useSelector((state: RootState) => state.myprofile.myprofile);
+
   return (
     <header
       className={clsx(
@@ -39,17 +41,15 @@ export const Header: FC = () => {
       </span>
 
       <div className="flex ml-auto gap-x-8 mobile-md:gap-x-2 items-center">
-        
-          <Link to="/account">
-            <img
-              src={`${base64}${
-                profile.icon?.length ? profile.icon : imageAvatar
-              }`}
-              className="rounded-full hover:scale-110 transition-all w-14 h-14 duration-300 object-cover"
-              alt="Profile Icon"
-            ></img>
-          </Link>
-       
+        <Link to="/account">
+          <img
+            src={`${base64}${
+              profile.icon?.length ? profile.icon : imageAvatar
+            }`}
+            className="rounded-full hover:scale-110 transition-all w-14 h-14 duration-300 object-cover"
+            alt="Profile Icon"
+          ></img>
+        </Link>
       </div>
     </header>
   );
